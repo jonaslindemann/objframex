@@ -20,9 +20,11 @@
 #include "WorldSettings.h"
 #include "PositionalObject.h"
 #include "GeomPoint.h"
-#include "GeomLine.h"
+#include "GeomLine.h" 
 #include "GeomPoints.h"
 #include "GeomLines.h"
+#include "ModelController.h"
+#include "BasicFrameFactory.h"
 
 double randomValue(double minVal, double maxVal)
 {
@@ -140,25 +142,12 @@ int main(int argc, char** argv)
 	srand((unsigned)time(0));
 
 	osg::ArgumentParser arguments(&argc, argv);
-
 	osg::DisplaySettings::instance()->setNumMultiSamples(4);
 
-	osg::ref_ptr<osg::ShapeDrawable> plane = new osg::ShapeDrawable(new osg::Box(osg::Vec3(0.0, 0.0, -0.02), 100.0, 100.0, 0.01));
-	plane->setColor(osg::Vec4(153.0 / 255.0, 189.0 / 255.0, 144.0 / 255.0, 1.0f));
-	plane->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF | osg::StateAttribute::PROTECTED);
-	plane->setNodeMask(rcvShadowMask);
-
-	osg::ref_ptr<osg::Geode> grid = createGrid(100.0, 100.0, 100, 100);
-	grid->setNodeMask(rcvShadowMask);
-
-	osg::ref_ptr<osg::LightSource> source = new osg::LightSource;
-	source->getLight()->setPosition(osg::Vec4(5.0, 10.0, 20.0, 0.0));
-	source->getLight()->setAmbient(osg::Vec4(0.4, 0.4, 0.4, 1.0));
-	source->getLight()->setDiffuse(osg::Vec4(0.8, 0.8, 0.8, 1.0));
-	source->getLight()->setSpecular(osg::Vec4(1.0, 1.0, 1.0, 1.0));
+	// ----- Shadowed scene---------------------------------------------------
 
 	osg::ref_ptr<osgShadow::ShadowMap> sm = new osgShadow::ShadowMap;
-	sm->setLight(source.get());
+	sm->setLight(WorldSettings::getInstance().lightSource());
 	sm->setTextureSize(osg::Vec2s(4096, 4096));
 	sm->setTextureUnit(1);
 	sm->setAmbientBias(osg::Vec2(0.8, 0.2));
@@ -168,82 +157,44 @@ int main(int argc, char** argv)
 	ssRoot->setReceivesShadowTraversalMask(rcvShadowMask);
 	ssRoot->setCastsShadowTraversalMask(castShadowMask);
 
-	osg::ref_ptr<SkyBox> skybox = createSkyBox(ssRoot.get());
-
-	ssRoot->addChild(plane.get());
-	ssRoot->addChild(grid.get());
+	// ----- Setup shadowed scene --------------------------------------------
 
 	WorldSettings::getInstance().setNodeRadius(0.15);
 	WorldSettings::getInstance().setLineRadius(0.075);
 
-	osg::ref_ptr<GeomPoints> points = new GeomPoints;
+	osg::ref_ptr<BasicFrameFactory> frameFactory = new BasicFrameFactory;
+	frameFactory->setSize(10, 10, 10);
+	frameFactory->generate();
 
-	int nFloors = 10;
-	int nCols = 4;
-	int nRows = 4;
+ 	ssRoot->addChild(frameFactory->points());
+	ssRoot->addChild(frameFactory->lines());
+	ssRoot->addChild(WorldSettings::getInstance().lightSource());
 
-	for (int i = 0; i < nFloors; i++)
-	{
-		for (int j = 0; j < nCols; j++)
-		{
-			for (int k = 0; k < nRows; k++)
-			{
-				points->add(2.0*j, 2.0*k, 2.0*i);
-			}
-		}
-	}
+	osg::ref_ptr<osg::ShapeDrawable> plane = new osg::ShapeDrawable(new osg::Box(osg::Vec3(0.0, 0.0, -0.02), 100.0, 100.0, 0.01));
+	plane->setColor(osg::Vec4(153.0 / 255.0, 189.0 / 255.0, 144.0 / 255.0, 1.0f));
+	plane->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF | osg::StateAttribute::PROTECTED);
+	plane->setNodeMask(rcvShadowMask);
 
-	osg::ref_ptr<GeomLines> lines = new GeomLines(points);
+	osg::ref_ptr<osg::Geode> grid = createGrid(100.0, 100.0, 100, 100);
+	grid->setNodeMask(rcvShadowMask);
 
-	for (int i = 0; i < nFloors-1; i++)
-	{
-		for (int j = 0; j < nCols; j++)
-		{
-			for (int k = 0; k < nRows; k++)
-			{
-				int idx0 = i * (nRows * nCols) + j*nCols + k;
-				int idx1 = (i + 1) * (nRows * nCols) + j*nCols + k;
-				lines->add(idx0, idx1);
-			}
-		}
-	}
+	ssRoot->addChild(plane.get());
+	ssRoot->addChild(grid.get());
 
-	for (int i = 1; i < nFloors; i++)
-	{
-		for (int k = 0; k < nRows; k++)
-		{
-			for (int j = 0; j < nCols-1; j++)
-			{
-				int idx0 = i * (nRows * nCols) + j*nCols + k;
-				int idx1 = i * (nRows * nCols) + (j+1)*nCols + k;
-				lines->add(idx0, idx1);
-			}
-		}
-	}
+	// ----- Add Sky box, shadow scene to root--------------------------------
 
-	for (int i = 1; i < nFloors; i++)
-	{
-		for (int j = 0; j < nCols; j++)
-		{
-			for (int k = 0; k < nRows - 1; k++)
-		    {
-				int idx0 = i * (nRows * nCols) + j*nCols + k;
-				int idx1 = i * (nRows * nCols) + j*nCols + k + 1;
-				lines->add(idx0, idx1);
-			}
-		}
-	}
-
- 	ssRoot->addChild(points);
-	ssRoot->addChild(lines);
-
-	ssRoot->addChild(source.get());
+	osg::ref_ptr<SkyBox> skybox = createSkyBox(ssRoot.get());
 
 	osg::ref_ptr<osg::Group> root = new osg::Group;
 	root->addChild(skybox.get());
 	root->addChild(ssRoot.get());
 
+	// ----- Setup viewer ----------------------------------------------------
+
 	osgViewer::Viewer viewer;
+
+	osg::ref_ptr<ModelController> controller = new ModelController;
+	viewer.addEventHandler(controller.get());
 
 	osgViewer::StatsHandler* statsHandler = new osgViewer::StatsHandler;
 	viewer.addEventHandler(statsHandler);

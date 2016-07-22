@@ -2,6 +2,7 @@
 
 #include <osg/ShapeDrawable>
 #include <osg/Material>
+#include <osg/LightSource>
 
 const unsigned int rcvShadowMask = 0x1;
 const unsigned int castShadowMask = 0x2;
@@ -14,6 +15,7 @@ private:
 	osg::ref_ptr<osg::ShapeDrawable> m_pointShape;
 	osg::ref_ptr<osg::Material> m_pointMaterial;
 	osg::ref_ptr<osg::Material> m_lineMaterial;
+	osg::ref_ptr<osg::LightSource> m_lightSource;
 	double m_lineRadius;
 	double m_nodeRadius;
 
@@ -38,6 +40,8 @@ public:
 	double nodeRadius();
 
 	osg::TessellationHints* tesselationHints();
+
+	osg::LightSource* lightSource();
 
 
 public:

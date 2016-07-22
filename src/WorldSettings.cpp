@@ -7,12 +7,17 @@ WorldSettings::WorldSettings()
 
 	m_pointShape = new osg::ShapeDrawable;
 	m_tesselationHints = new osg::TessellationHints;
-	m_tesselationHints->setDetailRatio(1.0);
+	m_tesselationHints->setDetailRatio(0.5);
+	m_lightSource = new osg::LightSource;
+	m_lightSource->getLight()->setPosition(osg::Vec4(5.0, 10.0, 20.0, 0.0));
+	m_lightSource->getLight()->setAmbient(osg::Vec4(0.4, 0.4, 0.4, 1.0));
+	m_lightSource->getLight()->setDiffuse(osg::Vec4(0.8, 0.8, 0.8, 1.0));
+	m_lightSource->getLight()->setSpecular(osg::Vec4(1.0, 1.0, 1.0, 1.0));
+
 }
 
 void WorldSettings::updateShapes()
 {
-
 	m_pointShape->setShape(new osg::Sphere(osg::Vec3(0.0, 0.0, 0.0), m_nodeRadius));
 	m_pointShape->setTessellationHints(m_tesselationHints);
 
@@ -93,4 +98,9 @@ double WorldSettings::nodeRadius()
 osg::TessellationHints * WorldSettings::tesselationHints()
 {
 	return m_tesselationHints.get();
+}
+
+osg::LightSource * WorldSettings::lightSource()
+{
+	return m_lightSource.get();
 }
