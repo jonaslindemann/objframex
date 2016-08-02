@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+   <FileVersion major="1" minor="6" />
+   <Project>
+      <Option title="ObjFrameX" />
+      <Option makefile_is_custom="1" />
+      <Option compiler="gcc" />
+      <Option virtualFolders="CMake Files\;CMake Files\src\;" />
+      <Build>
+      <Target title="all">
+         <Option working_dir="/Users/lindemann/Development/objframex" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/Makefile&quot;  VERBOSE=1 all" />
+            <CompileFile command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="edit_cache">
+         <Option working_dir="/Users/lindemann/Development/objframex" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/Makefile&quot;  VERBOSE=1 edit_cache" />
+            <CompileFile command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="rebuild_cache">
+         <Option working_dir="/Users/lindemann/Development/objframex" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/Makefile&quot;  VERBOSE=1 rebuild_cache" />
+            <CompileFile command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ObjFrameX">
+         <Option output="/Users/lindemann/Development/objframex/src/ObjFrameX" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/Users/lindemann/Development/objframex/src" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1" />
+            <Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/7.3.0/include" />
+            <Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include" />
+            <Add directory="/Library/Frameworks" />
+            <Add directory="/System/Library/Frameworks" />
+            <Add directory="/usr/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/src/Makefile&quot;  VERBOSE=1 ObjFrameX" />
+            <CompileFile command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/src/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/src/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ObjFrameX/fast">
+         <Option output="/Users/lindemann/Development/objframex/src/ObjFrameX" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/Users/lindemann/Development/objframex/src" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1" />
+            <Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/7.3.0/include" />
+            <Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include" />
+            <Add directory="/Library/Frameworks" />
+            <Add directory="/System/Library/Frameworks" />
+            <Add directory="/usr/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/src/Makefile&quot;  VERBOSE=1 ObjFrameX/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/src/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/Users/lindemann/Development/objframex/src/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      </Build>
+      <Unit filename="/Users/lindemann/Development/objframex/src/BasicFrameFactory.cpp">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/BasicFrameFactory.h">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/GeomLine.cpp">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/GeomLine.h">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/GeomLines.cpp">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/GeomLines.h">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/GeomPoint.cpp">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/GeomPoint.h">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/GeomPoints.cpp">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/GeomPoints.h">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/ModelController.cpp">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/ModelController.h">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/NodeSet.cpp">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/NodeSet.h">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/PositionalObject.cpp">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/PositionalObject.h">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/SkyBox.cpp">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/SkyBox.h">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/Structure.cpp">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/Structure.h">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/WorldSettings.cpp">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/WorldSettings.h">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/main.cpp">
+         <Option target="ObjFrameX"/>
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\" />
+      </Unit>
+      <Unit filename="/Users/lindemann/Development/objframex/src/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\src\" />
+      </Unit>
+   </Project>
+</CodeBlocks_project_file>
