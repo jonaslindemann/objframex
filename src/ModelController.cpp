@@ -11,7 +11,7 @@ bool ModelController::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionA
 	case osgGA::GUIEventAdapter::KEYDOWN:
 		switch (ea.getKey())
 		{
-		case 'd': 
+        case 'e':
 			osg::ref_ptr<osg::LightSource> source = WorldSettings::getInstance().lightSource();
 
 			osg::Vec4 pos = source->getLight()->getPosition();

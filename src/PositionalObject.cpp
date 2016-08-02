@@ -7,7 +7,7 @@ PositionalObject::PositionalObject()
 
 void PositionalObject::setNode(osg::Node * node)
 {
-	if (m_node!=nullptr)
+    if (m_node!=0)
 		this->removeChild(m_node);
 
 	m_node = node;

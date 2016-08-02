@@ -9,6 +9,8 @@
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgGA/TrackballManipulator>
+#include <osgGA/FirstPersonManipulator>
+#include <osgGA/UFOManipulator>
 #include <osgShadow/ShadowedScene>
 #include <osgShadow/ShadowMap>
 #include <osgShadow/SoftShadowMap>
@@ -25,6 +27,8 @@
 #include "GeomLines.h"
 #include "ModelController.h"
 #include "BasicFrameFactory.h"
+#include "PickHandler.h"
+#include "KeyboardFpsManipulator.h"
 
 double randomValue(double minVal, double maxVal)
 {
@@ -120,12 +124,12 @@ SkyBox* createSkyBox(const osg::Group* root)
 	geode->addDrawable(new osg::ShapeDrawable(new osg::Box(osg::Vec3(), root->getBound().radius())));
 	geode->setCullingActive(false);
 
-	osg::ref_ptr<osg::Image> posx = osgDB::readImageFile("images/sposx.png");
-	osg::ref_ptr<osg::Image> negx = osgDB::readImageFile("images/snegx.png");
-	osg::ref_ptr<osg::Image> posy = osgDB::readImageFile("images/sposz.png");
-	osg::ref_ptr<osg::Image> negy = osgDB::readImageFile("images/snegz.png");
-	osg::ref_ptr<osg::Image> posz = osgDB::readImageFile("images/snegy.png");
-	osg::ref_ptr<osg::Image> negz = osgDB::readImageFile("images/sposy.png");
+    osg::ref_ptr<osg::Image> posx = osgDB::readImageFile("images/sposx.png");
+    osg::ref_ptr<osg::Image> negx = osgDB::readImageFile("images/snegx.png");
+    osg::ref_ptr<osg::Image> posy = osgDB::readImageFile("images/sposz.png");
+    osg::ref_ptr<osg::Image> negy = osgDB::readImageFile("images/snegz.png");
+    osg::ref_ptr<osg::Image> posz = osgDB::readImageFile("images/snegy.png");
+    osg::ref_ptr<osg::Image> negz = osgDB::readImageFile("images/sposy.png");
 
 	osg::ref_ptr<SkyBox> skybox = new SkyBox;
 	skybox->getOrCreateStateSet()->setTextureAttributeAndModes(0, new osg::TexGen);
@@ -139,6 +143,11 @@ using namespace std;
 
 int main(int argc, char** argv) 
 {
+    //osg::setNotifyLevel(osg::INFO);
+
+    std::cout << "Test" << std::endl;
+    //osg::notify(osg::NOTICE) << "TESTING-------" << std::endl;
+
 	srand((unsigned)time(0));
 
 	osg::ArgumentParser arguments(&argc, argv);
@@ -163,7 +172,7 @@ int main(int argc, char** argv)
 	WorldSettings::getInstance().setLineRadius(0.075);
 
 	osg::ref_ptr<BasicFrameFactory> frameFactory = new BasicFrameFactory;
-	frameFactory->setSize(10, 10, 10);
+    frameFactory->setSize(10, 5, 5);
 	frameFactory->generate();
 
  	ssRoot->addChild(frameFactory->points());
@@ -193,16 +202,26 @@ int main(int argc, char** argv)
 
 	osgViewer::Viewer viewer;
 
+    osg::ref_ptr<PickHandler> pickHandler = new PickHandler;
+    root->addChild(pickHandler->getOrCreateSelectionBox());
+    viewer.addEventHandler(pickHandler);
+
 	osg::ref_ptr<ModelController> controller = new ModelController;
 	viewer.addEventHandler(controller.get());
 
 	osgViewer::StatsHandler* statsHandler = new osgViewer::StatsHandler;
 	viewer.addEventHandler(statsHandler);
 
+    osg::ref_ptr<KeyboardFpsManipulator> fpsManip = new KeyboardFpsManipulator;
 	osg::ref_ptr<osgGA::TrackballManipulator> manip = new osgGA::TrackballManipulator;
-	viewer.setCameraManipulator(manip.get());
+    osg::ref_ptr<osgGA::UFOManipulator> ufoManip = new osgGA::UFOManipulator;
 
-	viewer.setUpViewOnSingleScreen();
+    //viewer.setCameraManipulator(ufoManip.get());
+    viewer.setCameraManipulator(fpsManip.get());
+    //viewer.setCameraManipulator(manip.get());
+
+    viewer.setUpViewInWindow(0,0, 1024,768);
+    //viewer.setUpViewOnSingleScreen();
 	viewer.setSceneData(root.get());
 	viewer.getCameraManipulator()->setAutoComputeHomePosition(false);
 	viewer.getCameraManipulator()->setHomePosition(osg::Vec3(0.0, 40.0, 10.0), osg::Vec3(0, 0, 0), osg::Vec3(0, 0, 1));
