@@ -1,17 +1,27 @@
 #pragma once
 
 #include <osgGA/GUIEventHandler>
+#include <osgGA/StandardManipulator>
 #include <osgGA/FirstPersonManipulator>
+#include <osgGA/GUIEventAdapter>
+#include <osgGA/GUIActionAdapter>
 #include <osgViewer/Viewer>
 #include <osg/MatrixTransform>
 
 class KeyboardFpsManipulator : public osgGA::FirstPersonManipulator {
 private:
-    bool m_moving;
+    bool m_moveForward;
+	bool m_moveBackward;
+	bool m_moveLeft;
+	bool m_moveRight;
+
     double m_dt;
     double m_t0;
+
+	osgViewer::GraphicsWindow* m_window;
 public:
     KeyboardFpsManipulator();
+
 
     KeyboardFpsManipulator(const KeyboardFpsManipulator& copy, osg::CopyOp copyop = osg::CopyOp::SHALLOW_COPY)
         : osgGA::FirstPersonManipulator(copy, copyop) {}
@@ -20,4 +30,10 @@ public:
     META_Object(osgGA, osgGA::FirstPersonManipulator)
 
     virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
+
+
+	void setWindow(osgViewer::GraphicsWindow* window);
+protected:
+	virtual bool performMovement();
+	virtual bool handleMouseMove(const osgGA::GUIEventAdapter & ea, osgGA::GUIActionAdapter & us);
 };

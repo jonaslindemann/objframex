@@ -210,6 +210,7 @@ int main(int argc, char** argv)
 	viewer.addEventHandler(controller.get());
 
 	osgViewer::StatsHandler* statsHandler = new osgViewer::StatsHandler;
+	statsHandler->setKeyEventTogglesOnScreenStats('i');
 	viewer.addEventHandler(statsHandler);
 
     osg::ref_ptr<KeyboardFpsManipulator> fpsManip = new KeyboardFpsManipulator;
@@ -220,12 +221,18 @@ int main(int argc, char** argv)
     viewer.setCameraManipulator(fpsManip.get());
     //viewer.setCameraManipulator(manip.get());
 
-    viewer.setUpViewInWindow(0,0, 1024,768);
-    //viewer.setUpViewOnSingleScreen();
+    //viewer.setUpViewInWindow(50,50, 1024,768);
+    viewer.setUpViewOnSingleScreen();
 	viewer.setSceneData(root.get());
 	viewer.getCameraManipulator()->setAutoComputeHomePosition(false);
 	viewer.getCameraManipulator()->setHomePosition(osg::Vec3(0.0, 40.0, 10.0), osg::Vec3(0, 0, 0), osg::Vec3(0, 0, 1));
 	viewer.home();
+
+	std::vector<osgViewer::GraphicsWindow*> windows;
+
+	viewer.getWindows(windows);
+	windows[0]->useCursor(true);
+	fpsManip->setWindow(windows[0]);
 
 	return viewer.run();
 }
