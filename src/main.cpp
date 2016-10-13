@@ -143,7 +143,7 @@ using namespace std;
 
 int main(int argc, char** argv) 
 {
-    //osg::setNotifyLevel(osg::INFO);
+    osg::setNotifyLevel(osg::INFO);
 
     std::cout << "Test" << std::endl;
     //osg::notify(osg::NOTICE) << "TESTING-------" << std::endl;

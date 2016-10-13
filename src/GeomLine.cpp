@@ -74,7 +74,7 @@ void GeomLine::createCylinder()
 	cylinder->setRotation(osg::Quat(angle, osg::Vec3(t.x(), t.y(), t.z())));
 
 	cylinderDrawable = new osg::ShapeDrawable(cylinder);
-	cylinderDrawable->setTessellationHints(WorldSettings::getInstance().tesselationHints());
+  	cylinderDrawable->setTessellationHints(WorldSettings::getInstance().tesselationHints());
 	m_geode->removeDrawables(0);
 	m_geode->addDrawable(cylinderDrawable);
 
