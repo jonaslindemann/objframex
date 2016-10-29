@@ -21,7 +21,7 @@ void BasicFrameFactory::generate()
 		{
 			for (int k = 0; k < m_rows; k++)
 			{
-				m_points->add(m_colSpacing*j - m_cols / 2.0, m_rowSpacing*k - m_rows / 2.0, m_floorSpacing*i);
+				m_points->add(m_colSpacing*j - (m_cols-1)*m_colSpacing / 2.0, m_rowSpacing*k - (m_rows-1)*m_rowSpacing / 2.0, m_floorSpacing*i);
 			}
 		}
 	}

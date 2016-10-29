@@ -30,6 +30,7 @@
 #include "BasicFrameFactory.h"
 #include "PickHandler.h"
 #include "KeyboardFpsManipulator.h"
+#include "Grid.h"
 
 double randomValue(double minVal, double maxVal)
 {
@@ -72,56 +73,6 @@ osg::Geometry* createExtrusion(osg::Vec3Array* vertices, const osg::Vec3& direct
 
 	osgUtil::SmoothingVisitor::smooth(*extrusion);
 	return extrusion.release();
-}
-
-osg::Geode* createGrid(double width, double depth, int xDiv, int yDiv)
-{
-	double dx = width / xDiv;
-	double dy = depth / yDiv;
-
-	osg::Vec4 gridColor(153.0 / 255.0, 189.0 / 255.0, 144.0 / 255.0, 1.0f);
-	gridColor *= 0.8;
-
-	osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array;
-	osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array;
-	osg::ref_ptr<osg::Vec3Array> normals = new osg::Vec3Array;
-
-	for (int i = 0; i < yDiv + 1; i++)
-	{
-		vertices->push_back(osg::Vec3(-width / 2.0, -depth / 2.0 + dy * i, 0.0f));
-		vertices->push_back(osg::Vec3(width / 2.0, -depth / 2.0 + dy * i, 0.0f));
-		colors->push_back(gridColor);
-		colors->push_back(gridColor);
-	}
-
-	for (int i = 0; i < xDiv + 1; i++)
-	{
-		vertices->push_back(osg::Vec3(-width / 2.0 + dx * i, -depth / 2.0, 0.0f));
-		vertices->push_back(osg::Vec3(-width / 2.0 + dx * i, depth / 2.0, 0.0f));
-		colors->push_back(gridColor);
-		colors->push_back(gridColor);
-	}
-
-	normals->push_back(osg::Vec3(0.0f, -1.0f, 0.0f));
-
-	osg::ref_ptr<osg::Geometry> quad = new osg::Geometry;
-	quad->setVertexArray(vertices.get());
-	quad->setNormalArray(normals.get());
-	quad->setNormalBinding(osg::Geometry::BIND_OVERALL);
-	quad->setColorArray(colors.get());
-	quad->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
-	quad->addPrimitiveSet(new osg::DrawArrays(GL_LINES, 0, vertices->getNumElements()));
-
-	osg::ref_ptr<osg::Geode> grid = new osg::Geode;
-
-	osg::LineWidth* linewidth = new osg::LineWidth();
-	linewidth->setWidth(4.0f);
-
-	grid->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF | osg::StateAttribute::PROTECTED);
-	grid->getOrCreateStateSet()->setAttributeAndModes(linewidth, osg::StateAttribute::ON);
-	grid->addDrawable(quad.get());
-
-	return grid.release();
 }
 
 SkyBox* createSkyBox(const osg::Group* root)
@@ -185,16 +136,18 @@ int main(int argc, char** argv)
 	ssRoot->addChild(frameFactory->lines());
 	ssRoot->addChild(WorldSettings::getInstance().lightSource());
 
-	osg::ref_ptr<osg::ShapeDrawable> plane = new osg::ShapeDrawable(new osg::Box(osg::Vec3(0.0, 0.0, -0.02), 100.0, 100.0, 0.01));
+	osg::ref_ptr<osg::ShapeDrawable> plane = new osg::ShapeDrawable(new osg::Box(osg::Vec3(0.0, 0.0, -0.01), 100.0, 100.0, 0.01));
 	plane->setColor(osg::Vec4(153.0 / 255.0, 189.0 / 255.0, 144.0 / 255.0, 1.0f));
 	plane->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF | osg::StateAttribute::PROTECTED);
 	plane->setNodeMask(rcvShadowMask);
 
-	osg::ref_ptr<osg::Geode> grid = createGrid(100.0, 100.0, 100, 100);
-	grid->setNodeMask(rcvShadowMask);
+	//osg::ref_ptr<osg::Geode> grid = createGrid(100.0, 100.0, 100, 100);
+	//grid->setNodeMask(rcvShadowMask);
+
+	osg::ref_ptr<Grid> grid = new Grid();
 
 	ssRoot->addChild(plane.get());
-	ssRoot->addChild(grid.get());
+	//ssRoot->addChild(grid.get());
 
 	// ----- Add Sky box, shadow scene to root--------------------------------
 
@@ -202,6 +155,7 @@ int main(int argc, char** argv)
 
 	osg::ref_ptr<osg::Group> root = new osg::Group;
 	root->addChild(skybox.get());
+	root->addChild(grid.get());
 	root->addChild(ssRoot.get());
 
 	// ----- Setup viewer ----------------------------------------------------
