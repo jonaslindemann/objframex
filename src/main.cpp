@@ -218,8 +218,8 @@ int main(int argc, char** argv)
     osg::ref_ptr<osgGA::UFOManipulator> ufoManip = new osgGA::UFOManipulator;
 
     //viewer.setCameraManipulator(ufoManip.get());
-    viewer.setCameraManipulator(fpsManip.get());
-    //viewer.setCameraManipulator(manip.get());
+    //viewer.setCameraManipulator(fpsManip.get());
+    viewer.setCameraManipulator(manip.get());
 
     //viewer.setUpViewInWindow(50,50, 1024,768);
     viewer.setUpViewOnSingleScreen();
