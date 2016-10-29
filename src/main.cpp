@@ -5,6 +5,7 @@
 #include <osg/MatrixTransform>
 #include <osg/ShapeDrawable>
 #include <osg/TexGen>
+#include <osg/LineWidth>
 #include <osgDB/ReadFile>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
@@ -112,7 +113,12 @@ osg::Geode* createGrid(double width, double depth, int xDiv, int yDiv)
 	quad->addPrimitiveSet(new osg::DrawArrays(GL_LINES, 0, vertices->getNumElements()));
 
 	osg::ref_ptr<osg::Geode> grid = new osg::Geode;
+
+	osg::LineWidth* linewidth = new osg::LineWidth();
+	linewidth->setWidth(4.0f);
+
 	grid->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF | osg::StateAttribute::PROTECTED);
+	grid->getOrCreateStateSet()->setAttributeAndModes(linewidth, osg::StateAttribute::ON);
 	grid->addDrawable(quad.get());
 
 	return grid.release();
