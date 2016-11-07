@@ -7,7 +7,7 @@ WorldSettings::WorldSettings()
 
 	m_pointShape = new osg::ShapeDrawable;
 	m_tesselationHints = new osg::TessellationHints;
-	m_tesselationHints->setDetailRatio(0.5);
+	m_tesselationHints->setDetailRatio(0.3);
 	m_lightSource = new osg::LightSource;
 	m_lightSource->getLight()->setPosition(osg::Vec4(5.0, 10.0, 20.0, 0.0));
 	m_lightSource->getLight()->setAmbient(osg::Vec4(0.4, 0.4, 0.4, 1.0));
@@ -20,6 +20,11 @@ void WorldSettings::updateShapes()
 {
 	m_pointShape->setShape(new osg::Sphere(osg::Vec3(0.0, 0.0, 0.0), m_nodeRadius));
 	m_pointShape->setTessellationHints(m_tesselationHints);
+
+	m_selectionMaterial = new osg::Material;
+	m_selectionMaterial->setDiffuse(osg::Material::FRONT, osg::Vec4(1.0, 1.0, 0.0, 0.5));
+	m_selectionMaterial->setSpecular(osg::Material::FRONT, osg::Vec4(1.0, 1.0, 1.0, 0.5));
+	m_selectionMaterial->setShininess(osg::Material::FRONT, 100.0);
 
 	m_pointMaterial = new osg::Material;
 	m_pointMaterial->setDiffuse(osg::Material::FRONT, osg::Vec4(1.0, 0.5, 0.5, 1.0));
@@ -71,6 +76,17 @@ void WorldSettings::setLineMaterial(osg::Material * material)
 osg::Material * WorldSettings::lineMaterial()
 {
 	return m_lineMaterial.get();
+}
+
+void WorldSettings::setSelectionMaterial(osg::Material * material)
+{
+	m_selectionMaterial = material;
+	this->updateShapes();
+}
+
+osg::Material * WorldSettings::selectionMaterial()
+{
+	return m_selectionMaterial.get();
 }
 
 void WorldSettings::setLineRadius(double radius)

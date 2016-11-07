@@ -1,6 +1,4 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-SET(CMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT TRUE)
-SET(CMAKE_ECLIPSE_GENERATE_LINKED_RESOURCES FALSE)
 
 PROJECT(ObjFrameX)
 
@@ -20,21 +18,17 @@ ENDIF()
 OPTION(CMAKE_USE_RELATIVE_PATHS "If true, cmake will use relative paths in makefiles and projects." ${DEFAULT_RELATIVE_PATHS})
 MARK_AS_ADVANCED(CMAKE_USE_RELATIVE_PATHS)
 
-# Build example viewers
-OPTION(BUILD_EXAMPLES "Enable to build viewer examples" ON)
-
 
 IF (WIN32)
 	# Path to find OpenSceneGraph
-	#SET(OSG_DIR $ENV{OSG_DIR} CACHE PATH "E:/Users/Jonas/Development/OpenSceneGraph-runtime")
-	SET(OSG_DIR "E:/Users/Jonas/Development/OpenSceneGraph-runtime")
+	SET(OSG_DIR "d:/Users/Jonas/Development/OpenSceneGraph-runtime")
 	IF(NOT OSG_DIR)
 		MESSAGE(FATAL_ERROR "Error: OpenSceneGraph not found.")
 	ENDIF(NOT OSG_DIR)
 
 	# Where to find OpenSceneGraph third party dependencies
 	#SET(OSG_THIRD_PARTY_DIR $ENV{OSG_THIRD_PARTY_DIR} CACHE PATH "Path where to find the OpenSceneGraph third party dependencies")
-	SET(OSG_THIRD_PARTY_DIR "E:/Users/Jonas/Development/3rdParty")
+	SET(OSG_THIRD_PARTY_DIR "d:/Users/Jonas/Development/3rdParty")
 	IF(NOT OSG_THIRD_PARTY_DIR)
 		MESSAGE(FATAL_ERROR "Error: OpenSceneGraph 3rd Party Directory not found.")
 	ENDIF(NOT OSG_THIRD_PARTY_DIR)
@@ -42,8 +36,10 @@ IF (WIN32)
 	# Where to find Oculus SDK
 	#SET(OCULUS_SDK_ROOT_DIR $ENV{OCULUS_SDK_ROOT_DIR} CACHE PATH "Path where to find the Oculus SDK")
 	SET(OCULUS_SDK_ROOT_DIR "E:/Users/Jonas/Development/OculusSDK")
+	SET(USE_OCULUS TRUE)
 	IF(NOT OCULUS_SDK_ROOT_DIR)
-		MESSAGE(FATAL_ERROR "Error: Oculus SDK not found.")
+		MESSAGE("Info: Oculus SDK not found. Not building VR version")
+		SET(USE_OCULUS FALSE)
 	ENDIF(NOT OCULUS_SDK_ROOT_DIR)
 ENDIF(WIN32)
 
@@ -55,18 +51,28 @@ SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 # Library files
 #######################################
 FIND_PACKAGE( OpenGL REQUIRED )
-FIND_PACKAGE( OculusSDK REQUIRED)
+FIND_PACKAGE( OpenSceneGraph REQUIRED osgViewer osgDB osgGA osgUtil osgShadow)
+FIND_PACKAGE( OculusSDK )
 
 # Check that Oculus SDK match the desired version
 IF(NOT OCULUS_SDK_VERSION VERSION_EQUAL 1.3.0 AND 
 NOT OCULUS_SDK_VERSION VERSION_GREATER 1.3.0)
-	MESSAGE(FATAL_ERROR "ERROR: This library required SDK version 1.3.0 or later!")
+	MESSAGE("INFO: This library required SDK version 1.3.0 or later! Not building VR Version")
+	SET(USE_OCULUS FALSE)
 ENDIF()
 
-INCLUDE_DIRECTORIES(BEFORE
-    ${OPENGL_INCLUDE_DIR}
-    ${OCULUS_SDK_INCLUDE_DIRS}
-)
+if (USE_OCULUS)
+	INCLUDE_DIRECTORIES(BEFORE
+		${OPENGL_INCLUDE_DIR}
+ 		${OPENSCENEGRAPH_INCLUDE_DIR}
+ 		${OCULUS_SDK_INCLUDE_DIRS}
+	)
+else()
+	INCLUDE_DIRECTORIES(BEFORE
+		${OPENGL_INCLUDE_DIR}
+ 		${OPENSCENEGRAPH_INCLUDE_DIR}
+	)
+endif()
 
 IF(VISUAL_STUDIO_EXPRESS)
 	INCLUDE_DIRECTORIES(BEFORE

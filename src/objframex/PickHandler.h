@@ -11,7 +11,7 @@ private:
 protected:
     osg::ref_ptr<osg::MatrixTransform> m_selectionBox;
 public:
-    osg::Node* getOrCreateSelectionBox();
+    osg::MatrixTransform* getOrCreateSelectionBox();
 
     PickHandler();
 

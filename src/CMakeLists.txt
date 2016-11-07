@@ -1,1 +1,5 @@
-subdirs(objframex objframex-vr osgoculusviewer)
+if (USE_OCULUS)
+    subdirs(objframex objframex-vr osgoculusviewer)
+else()
+    subdirs(objframex)
+endif()

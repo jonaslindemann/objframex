@@ -15,6 +15,7 @@ private:
 	osg::ref_ptr<osg::ShapeDrawable> m_pointShape;
 	osg::ref_ptr<osg::Material> m_pointMaterial;
 	osg::ref_ptr<osg::Material> m_lineMaterial;
+	osg::ref_ptr<osg::Material> m_selectionMaterial;
 	osg::ref_ptr<osg::LightSource> m_lightSource;
 	double m_lineRadius;
 	double m_nodeRadius;
@@ -32,6 +33,9 @@ public:
 
 	void setLineMaterial(osg::Material* material);
 	osg::Material* lineMaterial();
+
+	void setSelectionMaterial(osg::Material* material);
+	osg::Material* selectionMaterial();
 
 	void setLineRadius(double radius);
 	double lineRadius();

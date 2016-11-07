@@ -75,6 +75,10 @@ void GeomLine::createCylinder()
 
 	cylinderDrawable = new osg::ShapeDrawable(cylinder);
   	cylinderDrawable->setTessellationHints(WorldSettings::getInstance().tesselationHints());
+
+	cylinderDrawable->setUserValue("Owner", std::string("GeomLine"));
+	cylinderDrawable->setUserValue("OwnerRef", reinterpret_cast<std::uintptr_t>(this));
+
 	m_geode->removeDrawables(0);
 	m_geode->addDrawable(cylinderDrawable);
 
@@ -86,6 +90,10 @@ GeomLine::GeomLine()
 {
 	m_geode = new osg::Geode;
 	this->addChild(m_geode);
+	this->setUserValue("Owner", std::string("GeomLine"));
+	this->setUserValue("OwnerRef", reinterpret_cast<std::uintptr_t>(this));
+	m_geode->setUserValue("Owner", std::string("GeomLine"));
+	m_geode->setUserValue("OwnerRef", reinterpret_cast<std::uintptr_t>(this));
 }
 
 void GeomLine::setPoints(GeomPoint * p0, GeomPoint * p1)
