@@ -8,12 +8,21 @@
 #include <osgViewer/Viewer>
 #include <osg/MatrixTransform>
 
+#ifdef WIN32
+#include <Windows.h>
+#include <XInput.h>
+#endif
+
 class KeyboardFpsManipulator : public osgGA::FirstPersonManipulator {
 private:
     bool m_moveForward;
 	bool m_moveBackward;
 	bool m_moveLeft;
 	bool m_moveRight;
+
+#ifdef WIN32
+	XINPUT_STATE m_ctrlState;
+#endif
 
     double m_dt;
     double m_t0;

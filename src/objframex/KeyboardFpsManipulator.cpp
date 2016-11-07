@@ -55,10 +55,12 @@ bool KeyboardFpsManipulator::performMovement()
 	}
 
 	// get deltaX and deltaY
-	float dx = _ga_t0->getXnormalized() - _ga_t1->getXnormalized();
-	float dy = _ga_t0->getYnormalized() - _ga_t1->getYnormalized();
+	//float dx = _ga_t0->getXnormalized() - _ga_t1->getXnormalized();
+	//float dy = _ga_t0->getYnormalized() - _ga_t1->getYnormalized();
+	float dx = _ga_t0->getXnormalized();
+	float dy = _ga_t0->getYnormalized();
 
-	std::cout << dx << ", " << dy << std::endl;
+	//std::cout << dx << ", " << dy << std::endl;
 
 	// return if there is no movement.
 	if (dx == 0. && dy == 0.)
@@ -69,19 +71,19 @@ bool KeyboardFpsManipulator::performMovement()
 	unsigned int buttonMask = _ga_t1->getButtonMask();
 	if (buttonMask == GUIEventAdapter::LEFT_MOUSE_BUTTON)
 	{
-		return performMovementLeftMouseButton(eventTimeDelta, dx, dy);
+		return performMovementLeftMouseButton(eventTimeDelta, 0, 0);
 	}
 	else if (buttonMask == GUIEventAdapter::MIDDLE_MOUSE_BUTTON ||
 		buttonMask == (GUIEventAdapter::LEFT_MOUSE_BUTTON | GUIEventAdapter::RIGHT_MOUSE_BUTTON))
 	{
-		return performMovementMiddleMouseButton(eventTimeDelta, dx, dy);
+		return performMovementMiddleMouseButton(eventTimeDelta, 0, 0);
 	}
 	else if (buttonMask == GUIEventAdapter::RIGHT_MOUSE_BUTTON)
 	{
-		return performMovementRightMouseButton(eventTimeDelta, dx, dy);
+		return performMovementRightMouseButton(eventTimeDelta, 0,0);
 	}
 
-	return performMovementLeftMouseButton(eventTimeDelta, dx, dy);;
+	return performMovementLeftMouseButton(eventTimeDelta, 0, 0);
 }
 
 bool KeyboardFpsManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
@@ -91,6 +93,22 @@ bool KeyboardFpsManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUI
 	bool moved = false;
 
 	double t1;
+
+#ifdef WIN32
+	ZeroMemory(&m_ctrlState, sizeof(XINPUT_STATE));
+	// Simply get the state of the controller from XInput.
+	DWORD dwResult = XInputGetState(0, &m_ctrlState);
+
+	if (dwResult == ERROR_SUCCESS)
+	{
+		// Controller is connected 
+		std::cout << "Controller connected." << std::endl;
+	}
+	else
+	{
+		// Controller is not connected 
+	}
+#endif
 
     switch (ea.getEventType())
     {
@@ -161,10 +179,12 @@ bool KeyboardFpsManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUI
 
 	if (!moved)
 	{
+		/*
 		int _mouseCenterX = (ea.getXmin() + ea.getXmax()) / 2.0f;
 		int _mouseCenterY = (ea.getYmin() + ea.getYmax()) / 2.0f;
 		aa.requestWarpPointer(_mouseCenterX, _mouseCenterY);
 		this->flushMouseEventStack();
+		*/
 	}
     return result;
 }

@@ -132,6 +132,7 @@ int main(int argc, char** argv)
     frameFactory->setSize(10, 5, 5);
 	frameFactory->generate();
 
+
  	ssRoot->addChild(frameFactory->points());
 	ssRoot->addChild(frameFactory->lines());
 	ssRoot->addChild(WorldSettings::getInstance().lightSource());
@@ -141,13 +142,9 @@ int main(int argc, char** argv)
 	plane->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF | osg::StateAttribute::PROTECTED);
 	plane->setNodeMask(rcvShadowMask);
 
-	//osg::ref_ptr<osg::Geode> grid = createGrid(100.0, 100.0, 100, 100);
-	//grid->setNodeMask(rcvShadowMask);
-
 	osg::ref_ptr<Grid> grid = new Grid();
 
 	ssRoot->addChild(plane.get());
-	//ssRoot->addChild(grid.get());
 
 	// ----- Add Sky box, shadow scene to root--------------------------------
 
@@ -174,12 +171,13 @@ int main(int argc, char** argv)
 	viewer.addEventHandler(statsHandler);
 
     osg::ref_ptr<KeyboardFpsManipulator> fpsManip = new KeyboardFpsManipulator;
+	//osg::ref_ptr<osgGA::FirstPersonManipulator> fpsManip = new osgGA::FirstPersonManipulator;
 	osg::ref_ptr<osgGA::TrackballManipulator> manip = new osgGA::TrackballManipulator;
     osg::ref_ptr<osgGA::UFOManipulator> ufoManip = new osgGA::UFOManipulator;
 
     //viewer.setCameraManipulator(ufoManip.get());
-    //viewer.setCameraManipulator(fpsManip.get());
-    viewer.setCameraManipulator(manip.get());
+    viewer.setCameraManipulator(fpsManip.get());
+    //viewer.setCameraManipulator(manip.get());
 
     //viewer.setUpViewInWindow(50,50, 1024,768);
     viewer.setUpViewOnSingleScreen();

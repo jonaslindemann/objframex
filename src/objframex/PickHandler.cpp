@@ -5,6 +5,7 @@
 #include <osg/PolygonMode>
 #include <osg/BoundingBox>
 #include <osgViewer/Viewer>
+#include <osg/BlendFunc>
 #include <osgUtil/LineSegmentIntersector>
 
 #include "WorldSettings.h"
@@ -31,12 +32,16 @@ osg::MatrixTransform* PickHandler::getOrCreateSelectionBox()
         m_selectionBox->setNodeMask(0x1);
         m_selectionBox->addChild(geode);
 		m_selectionBox->getOrCreateStateSet()->setAttribute(WorldSettings::getInstance().selectionMaterial());
+
 		osg::StateSet* ss = m_selectionBox->getOrCreateStateSet();
 		ss->setMode(GL_NORMALIZE, osg::StateAttribute::ON);
-
 		ss->setMode(GL_BLEND, osg::StateAttribute::ON);
 		ss->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
 		ss->setRenderBinDetails(1, "DepthSortedBin");
+
+
+		osg::BlendFunc* bf = new osg::BlendFunc(osg::BlendFunc::ONE, osg::BlendFunc::ONE);
+		ss->setAttributeAndModes(bf);
 
         //ss->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
         //ss->setAttributeAndModes(new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE));
