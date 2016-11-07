@@ -1,5 +1,8 @@
 @echo off
 
+set OSG_DIR="e:\\Users\\Jonas\\Development\\OpenSceneGraph-runtime"
+set OSG_THIRD_PARTY_DIR="d:\\Users\\Jonas\\Development\\3rdParty"
+set OCULUS_SDK_ROOT_DIR="E:\\Users\\Jonas\\Development\\OculusSDK"
 rem OSG_ROOT="D:\Users\Jonas\Libraries\OpenSceneGraph-3.4.0\build"
 rem set OSG_DIR="D:\Users\Jonas\Libraries\OpenSceneGraph-3.4.0\build"
 rem OSG_SOURCE="D:\\Users\\Jonas\\Libraries\\OpenSceneGraph-3.4.0"
@@ -19,5 +22,5 @@ mkdir build
 echo Configuring debug
 
 cd build
-cmake -DCMAKE_MODULE_PATH="%OSG_SOURCE%\\CMakeModules" ..
+cmake -DOSG_DIR=%OSG_DIR% -DOSG_THIRD_PARTY_DIR=%OSG_THIRD_PARTY_DIR% -DOCULUS_SDK_ROOT_DIR=%OCULUS_SDK_ROOT_DIR% ..
 cd ..

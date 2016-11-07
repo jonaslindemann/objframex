@@ -21,21 +21,21 @@ MARK_AS_ADVANCED(CMAKE_USE_RELATIVE_PATHS)
 
 IF (WIN32)
 	# Path to find OpenSceneGraph
-	SET(OSG_DIR "d:/Users/Jonas/Development/OpenSceneGraph-runtime")
+	#SET(OSG_DIR "d:/Users/Jonas/Development/OpenSceneGraph-runtime")
 	IF(NOT OSG_DIR)
 		MESSAGE(FATAL_ERROR "Error: OpenSceneGraph not found.")
 	ENDIF(NOT OSG_DIR)
 
 	# Where to find OpenSceneGraph third party dependencies
 	#SET(OSG_THIRD_PARTY_DIR $ENV{OSG_THIRD_PARTY_DIR} CACHE PATH "Path where to find the OpenSceneGraph third party dependencies")
-	SET(OSG_THIRD_PARTY_DIR "d:/Users/Jonas/Development/3rdParty")
+	#SET(OSG_THIRD_PARTY_DIR "d:/Users/Jonas/Development/3rdParty")
 	IF(NOT OSG_THIRD_PARTY_DIR)
 		MESSAGE(FATAL_ERROR "Error: OpenSceneGraph 3rd Party Directory not found.")
 	ENDIF(NOT OSG_THIRD_PARTY_DIR)
 
 	# Where to find Oculus SDK
 	#SET(OCULUS_SDK_ROOT_DIR $ENV{OCULUS_SDK_ROOT_DIR} CACHE PATH "Path where to find the Oculus SDK")
-	SET(OCULUS_SDK_ROOT_DIR "E:/Users/Jonas/Development/OculusSDK")
+	#SET(OCULUS_SDK_ROOT_DIR "E:/Users/Jonas/Development/OculusSDK")
 	SET(USE_OCULUS TRUE)
 	IF(NOT OCULUS_SDK_ROOT_DIR)
 		MESSAGE("Info: Oculus SDK not found. Not building VR version")

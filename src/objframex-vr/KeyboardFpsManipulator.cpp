@@ -101,7 +101,6 @@ bool KeyboardFpsManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUI
 
 	double t1;
 
-	osg::Quat q = m_oculusDevice->orientation();
 	osg::Vec3 eye;
 	osg::Vec3 center;
 	osg::Vec3 up;

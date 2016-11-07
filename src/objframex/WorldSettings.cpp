@@ -7,7 +7,7 @@ WorldSettings::WorldSettings()
 
 	m_pointShape = new osg::ShapeDrawable;
 	m_tesselationHints = new osg::TessellationHints;
-	m_tesselationHints->setDetailRatio(0.3);
+	m_tesselationHints->setDetailRatio(0.2);
 	m_lightSource = new osg::LightSource;
 	m_lightSource->getLight()->setPosition(osg::Vec4(5.0, 10.0, 20.0, 0.0));
 	m_lightSource->getLight()->setAmbient(osg::Vec4(0.4, 0.4, 0.4, 1.0));
