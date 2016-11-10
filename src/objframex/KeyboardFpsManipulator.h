@@ -13,6 +13,8 @@
 #include <XInput.h>
 #endif
 
+//#include "oculusdevice.h"
+
 class KeyboardFpsManipulator : public osgGA::FirstPersonManipulator {
 private:
     bool m_moveForward;
@@ -20,12 +22,14 @@ private:
 	bool m_moveLeft;
 	bool m_moveRight;
 
+    double m_dt;
+    double m_t0;
+
 #ifdef WIN32
 	XINPUT_STATE m_ctrlState;
 #endif
 
-    double m_dt;
-    double m_t0;
+	osgViewer::Viewer* m_viewer;
 
 	osgViewer::GraphicsWindow* m_window;
 public:
@@ -44,5 +48,6 @@ public:
 	void setWindow(osgViewer::GraphicsWindow* window);
 protected:
 	virtual bool performMovement();
-	virtual bool handleMouseMove(const osgGA::GUIEventAdapter & ea, osgGA::GUIActionAdapter & us);
+
+	void moveForward(const osg::Quat& rotation, const double distance);
 };

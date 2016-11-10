@@ -16,6 +16,12 @@ KeyboardFpsManipulator::KeyboardFpsManipulator():
 	this->setAllowThrow(false);
 }
 
+void KeyboardFpsManipulator::moveForward(const osg::Quat& rotation, const double distance)
+{
+	_eye += rotation * osg::Vec3d(distance, 0., 0.);
+}
+
+/*
 /// Handles GUIEventAdapter::DRAG event.
 bool KeyboardFpsManipulator::handleMouseMove(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& us)
 {
@@ -29,6 +35,7 @@ bool KeyboardFpsManipulator::handleMouseMove(const osgGA::GUIEventAdapter& ea, o
 
 	return true;
 }
+*/
 
 
 void KeyboardFpsManipulator::setWindow(osgViewer::GraphicsWindow * window)
@@ -55,35 +62,33 @@ bool KeyboardFpsManipulator::performMovement()
 	}
 
 	// get deltaX and deltaY
-	//float dx = _ga_t0->getXnormalized() - _ga_t1->getXnormalized();
-	//float dy = _ga_t0->getYnormalized() - _ga_t1->getYnormalized();
-	float dx = _ga_t0->getXnormalized();
-	float dy = _ga_t0->getYnormalized();
-
-	//std::cout << dx << ", " << dy << std::endl;
+	float dx = _ga_t0->getXnormalized() - _ga_t1->getXnormalized();
+	float dy = _ga_t0->getYnormalized() - _ga_t1->getYnormalized();
 
 	// return if there is no movement.
 	if (dx == 0. && dy == 0.)
 		return false;
 
 
+	/*
 	// call appropriate methods
 	unsigned int buttonMask = _ga_t1->getButtonMask();
 	if (buttonMask == GUIEventAdapter::LEFT_MOUSE_BUTTON)
 	{
-		return performMovementLeftMouseButton(eventTimeDelta, 0, 0);
+		return performMovementLeftMouseButton(eventTimeDelta, dx, dy);
 	}
 	else if (buttonMask == GUIEventAdapter::MIDDLE_MOUSE_BUTTON ||
 		buttonMask == (GUIEventAdapter::LEFT_MOUSE_BUTTON | GUIEventAdapter::RIGHT_MOUSE_BUTTON))
 	{
-		return performMovementMiddleMouseButton(eventTimeDelta, 0, 0);
+		return performMovementMiddleMouseButton(eventTimeDelta, dx, dy);
 	}
 	else if (buttonMask == GUIEventAdapter::RIGHT_MOUSE_BUTTON)
 	{
-		return performMovementRightMouseButton(eventTimeDelta, 0,0);
+		return performMovementRightMouseButton(eventTimeDelta, dx, dy);
 	}
 
-	return performMovementLeftMouseButton(eventTimeDelta, 0, 0);
+	return performMovementLeftMouseButton(eventTimeDelta, dx, dy);;
+	*/
 }
 
 bool KeyboardFpsManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
@@ -94,26 +99,142 @@ bool KeyboardFpsManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUI
 
 	double t1;
 
+	osg::Vec3 eye;
+	osg::Vec3 center;
+	osg::Vec3 up;
+
+	this->getMatrix().getLookAt(eye, center, up);
+	
+	//std::cout << eye.x() << ", " << eye.y() << ", " << eye.z() << " : ";
+	//std::cout << center.x() << ", " << center.y() << ", " << center.z() << " : ";
+	//std::cout << up.x() << ", " << up.y() << ", " << up.z() << std::endl;
+
+
+	osg::Vec3 f = center - eye;
+	osg::Vec3 r = f ^ up;
+
+	osg::Vec3 forward;
+	osg::Vec3 right;
+
+
+	//forward.set(f.x(), -f.z(), -f.y());
+	//right.set(r.x(), -r.z(), -r.y());
+	
+	forward = -f;
+	right = -r;
+
+
 #ifdef WIN32
 	ZeroMemory(&m_ctrlState, sizeof(XINPUT_STATE));
 	// Simply get the state of the controller from XInput.
 	DWORD dwResult = XInputGetState(0, &m_ctrlState);
 
+	float normalizedLX;
+	float normalizedLY;
+	float normalizedLMagnitude;
+	float normalizedRX;
+	float normalizedRY;
+	float normalizedRMagnitude;
+
 	if (dwResult == ERROR_SUCCESS)
 	{
-		// Controller is connected 
-		std::cout << "Controller connected." << std::endl;
+		float LX = m_ctrlState.Gamepad.sThumbLX;
+		float LY = m_ctrlState.Gamepad.sThumbLY;
+
+		//determine how far the controller is pushed
+		float magnitudeL = sqrt(LX*LX + LY*LY);
+
+		//determine the direction the controller is pushed
+		normalizedLX = LX / magnitudeL;
+		normalizedLY = LY / magnitudeL;
+
+		float normalizedLMagnitude = 0;
+
+		//check if the controller is outside a circular dead zone
+		if (magnitudeL > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+		{
+			//clip the magnitude at its expected maximum value
+			if (magnitudeL > 32767) magnitudeL = 32767;
+
+			//adjust magnitude relative to the end of the dead zone
+			magnitudeL -= XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+
+			//optionally normalize the magnitude with respect to its expected range
+			//giving a magnitude value of 0.0 to 1.0
+			normalizedLMagnitude = magnitudeL / (32767 - XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+		}
+		else //if the controller is in the deadzone zero out the magnitude
+		{
+			magnitudeL = 0.0;
+			normalizedLMagnitude = 0.0;
+		}
+
+		std::cout << "magnitude = " << normalizedLMagnitude << " direction = (" << normalizedLX << ", " << normalizedLY << ")" << std::endl;
+
+		float RX = m_ctrlState.Gamepad.sThumbRX;
+		float RY = m_ctrlState.Gamepad.sThumbRY;
+
+		//determine how far the controller is pushed
+		float magnitudeR = sqrt(RX*RX + RY*RY);
+
+		//determine the direction the controller is pushed
+		normalizedRX = RX / magnitudeR;
+		normalizedRY = RY / magnitudeR;
+
+		normalizedRMagnitude = 0;
+
+		//check if the controller is outside a circular dead zone
+		if (magnitudeR > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+		{
+			//clip the magnitude at its expected maximum value
+			if (magnitudeR > 32767) magnitudeR = 32767;
+
+			//adjust magnitude relative to the end of the dead zone
+			magnitudeR -= XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+
+			//optionally normalize the magnitude with respect to its expected range
+			//giving a magnitude value of 0.0 to 1.0
+			normalizedRMagnitude = magnitudeR / (32767 - XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+		}
+		else //if the controller is in the deadzone zero out the magnitude
+		{
+			magnitudeR = 0.0;
+			normalizedRMagnitude = 0.0;
+		}
+
+		std::cout << "magnitude = " << normalizedRMagnitude << " direction = (" << normalizedLX << ", " << normalizedLY << ")" << std::endl;
 	}
 	else
 	{
 		// Controller is not connected 
 	}
 #endif
+	
+	//std::cout << forward.x() << ", " << forward.y() << ", " << forward.z() << std::endl;
+	//std::cout << right.x() << ", " << right.y() << ", " << right.z() << std::endl;
+
+	osg::CoordinateFrame coordinateFrame = getCoordinateFrame(_eye);
+	osg::Vec3d localUp = getUpVector(coordinateFrame);
+	this->rotateYawPitch(_rotation, normalizedRMagnitude * 0.01 * normalizedRX, -normalizedRMagnitude * 0.01 * normalizedRY, localUp);
+	this->moveForward(_rotation, normalizedLMagnitude * 0.1 * normalizedLY);
+	this->moveRight(normalizedLMagnitude * 0.1 * normalizedLX);
+	/*
+	osg::Quat xRot;
+	xRot.makeRotate(-osg::PI_2, osg::X_AXIS);
+
+	osg::Quat yRot;
+	yRot.makeRotate(osg::PI_2, osg::Y_AXIS);
+
+	q = q * xRot * yRot;
+	*/
+
+
 
     switch (ea.getEventType())
     {
     case osgGA::GUIEventAdapter::FRAME:
         //std::cout << "FRAME" << std::endl;
+
         t1 = ea.getTime();
         if( m_t0 == 0.0 )
         {
@@ -125,14 +246,16 @@ bool KeyboardFpsManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUI
             m_dt = t1 - m_t0;
             m_t0 = t1;
         }
-        if (m_moveForward)
-            this->moveForward(m_dt*12.0);
+
+		if (m_moveForward)
+			_eye -= forward * 12.0 * m_dt;
 		if (m_moveBackward)
-			this->moveForward(-m_dt*12.0);
+			_eye += forward * 12.0 * m_dt;
+
 		if (m_moveLeft)
-			this->moveRight(-m_dt*12.0);
+			_eye += right *  12.0 * m_dt;
 		if (m_moveRight)
-			this->moveRight(m_dt*12.0);
+			_eye -= right *  12.0 * m_dt;
 
 		return false;
         break;
@@ -183,8 +306,8 @@ bool KeyboardFpsManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUI
 		int _mouseCenterX = (ea.getXmin() + ea.getXmax()) / 2.0f;
 		int _mouseCenterY = (ea.getYmin() + ea.getYmax()) / 2.0f;
 		aa.requestWarpPointer(_mouseCenterX, _mouseCenterY);
-		this->flushMouseEventStack();
 		*/
+		this->flushMouseEventStack();
 	}
     return result;
 }
