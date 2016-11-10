@@ -1,8 +1,8 @@
 @echo off
 
-set OSG_DIR="d:\\Users\\Jonas\\Development\\OpenSceneGraph-runtime"
-set OSG_THIRD_PARTY_DIR="d:\\Users\\Jonas\\Development\\3rdParty"
-set OCULUS_SDK_ROOT_DIR="E:\\Users\\Jonas\\Development\\OculusSDK"
+set OSG_DIR="c:\\Users\\Jonas\\Development\\OpenSceneGraph-runtime"
+set OSG_THIRD_PARTY_DIR="c:\\Users\\Jonas\\Development\\3rdParty"
+set OCULUS_SDK_ROOT_DIR="c:\\Users\\Jonas\\Development\\OculusSDK"
 rem OSG_ROOT="D:\Users\Jonas\Libraries\OpenSceneGraph-3.4.0\build"
 rem set OSG_DIR="D:\Users\Jonas\Libraries\OpenSceneGraph-3.4.0\build"
 rem OSG_SOURCE="D:\\Users\\Jonas\\Libraries\\OpenSceneGraph-3.4.0"
